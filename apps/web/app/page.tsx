@@ -6,14 +6,17 @@ import Hero from '../components/sections/Hero'
 import RichText from '../components/common/RichText'
 import CTA from '../components/sections/CTA'
 
+import { Page } from '../types/page'
+import { Section } from '../types/section'
+
 export default async function HomePage(): Promise<ReactElement> {
-  const data = await client.fetch(homePageQuery)
+  const data: Page = await client.fetch(homePageQuery)
 
   return (
     <main>
-      <h1>{data?.title}</h1>
+      <h1>{data.title}</h1>
 
-      {data?.sections?.map((section: any) => {
+      {data.sections.map((section: Section) => {
         switch (section._type) {
           case 'hero':
             return <Hero key={section._key} section={section} />

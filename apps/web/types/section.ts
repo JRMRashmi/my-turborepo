@@ -1,4 +1,5 @@
-import { SanityImage } from './common'
+import { SanityImage, ArrayItem } from './common'
+import type { RichText } from '../../studio/sanity.types'
 
 export type HeroSection = {
   _key: string
@@ -8,17 +9,14 @@ export type HeroSection = {
   image?: SanityImage
 }
 
-export type RichTextSection = {
-  _key: string
-  _type: 'richText'
-  content: any[]
-}
+export type RichTextSection = ArrayItem<RichText>
 
 export type CTASection = {
   _key: string
   _type: 'cta'
   title: string
   buttonText: string
+  buttonLink: string
 }
 
 export type Section =

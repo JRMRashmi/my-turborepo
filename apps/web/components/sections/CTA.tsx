@@ -1,10 +1,5 @@
 import { ReactElement } from 'react'
-
-type CTASection = {
-  title: string
-  buttonText: string
-  buttonLink: string
-}
+import { CTASection } from '../../types/section'
 
 type CTAProps = {
   section: CTASection

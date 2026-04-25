@@ -14,3 +14,7 @@ export type SEO = {
   metaTitle?: string
   metaDescription?: string
 }
+
+export type ArrayItem<T> = T & {
+  _key: string
+}

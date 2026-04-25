@@ -1,15 +1,12 @@
 import { ReactElement } from 'react'
 import { urlFor } from '../../lib/image'
 
-type HeroSection={
-    heading:string
-    subheading:string
-    image?:any
-}
+import { HeroSection } from '../../types/section'
 
 type HeroProps = {
   section: HeroSection
 }
+
 
 export default function Hero({ section }: HeroProps): ReactElement {
   return (

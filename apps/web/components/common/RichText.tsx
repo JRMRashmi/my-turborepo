@@ -1,8 +1,7 @@
 import { ReactElement } from 'react'
 
-type RichTextSection = {
-  content: any[]
-}
+import { RichTextSection } from '../../types/section'
+
 
 type RichTextProps = {
   section: RichTextSection
