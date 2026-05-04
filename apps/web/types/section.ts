@@ -7,6 +7,14 @@ export type HeroSection = {
   heading: string
   subheading?: string
   image?: SanityImage
+
+  richText?: RichText | null
+
+  cta?: {
+    title?: string
+    buttonText?: string
+    buttonLink?: string
+  }
 }
 
 export type RichTextSection = ArrayItem<RichText>

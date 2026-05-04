@@ -27,12 +27,6 @@ export default async function HomePage(): Promise<ReactElement> {
               case 'hero':
                 return <Hero key={section._key} section={section} />
 
-              case 'richText':
-                return <RichText key={section._key} section={section} />
-
-              case 'cta':
-                return <CTA key={section._key} section={section} />
-
               default:
                 return null
             }

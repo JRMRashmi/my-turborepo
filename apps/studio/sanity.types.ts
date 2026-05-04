@@ -62,6 +62,8 @@ export type Hero = {
     crop?: SanityImageCrop
     _type: 'image'
   }
+  richText?: RichText
+  cta?: Cta
 }
 
 export type Seo = {
