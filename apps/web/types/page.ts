@@ -4,7 +4,7 @@ import { Section } from './section'
 export type Page = {
   _id: string
   _type: 'page'
-  title: string
+  title: string 
   slug: Slug
   seo?: SEO
   sections: Section[]

@@ -12,25 +12,33 @@ import { Section } from '../types/section'
 export default async function HomePage(): Promise<ReactElement> {
   const data: Page = await client.fetch(homePageQuery)
 
+   console.log("SANITY DATA:", data) // 👈 ADD HERE
+
   return (
-    <main>
-      <h1>{data.title}</h1>
+    <main className="min-h-screen bg-gray-50">
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        <h1 className="mb-10 text-4xl font-bold tracking-tight text-gray-900">
+          {data.title}
+        </h1>
 
-      {data.sections.map((section: Section) => {
-        switch (section._type) {
-          case 'hero':
-            return <Hero key={section._key} section={section} />
+        <div className="space-y-16">
+          {data.sections.map((section: Section) => {
+            switch (section._type) {
+              case 'hero':
+                return <Hero key={section._key} section={section} />
 
-          case 'richText':
-            return <RichText key={section._key} section={section} />
+              case 'richText':
+                return <RichText key={section._key} section={section} />
 
-          case 'cta':
-            return <CTA key={section._key} section={section} />
+              case 'cta':
+                return <CTA key={section._key} section={section} />
 
-          default:
-            return null
-        }
-      })}
+              default:
+                return null
+            }
+          })}
+        </div>
+      </div>
     </main>
   )
 }

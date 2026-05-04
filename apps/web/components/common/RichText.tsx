@@ -8,8 +8,10 @@ type RichTextProps = {
 }
 export default function RichText({ section }: RichTextProps): ReactElement {
   return (
-    <section>
-      <p>{section.content?.[0]?.children?.[0]?.text}</p>
+    <section className="prose prose-lg max-w-none text-gray-700">
+      {section.content?.map((block) => (
+        <p key={block._key}>{block.children?.map((c) => c.text).join(' ')}</p>
+      ))}
     </section>
   )
 }
