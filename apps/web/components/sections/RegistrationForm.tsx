@@ -1,80 +1,114 @@
 'use client'
 
-import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import type { ReactElement } from 'react'
 
-export default function RegistrationForm() : ReactElement {
-  const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    company: '',
-    address: '',
-    month: '',
-    day: '',
-    year: '',
+/* 🔹 Validation Schema */
+const schema = z.object({
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  email: z.string().email('Invalid email'),
+  company: z.string().optional(),
+  address: z.string().min(1, 'Address is required'),
+  month: z.string().min(1, 'Select month'),
+  day: z.string().min(1, 'Select day'),
+  year: z.string().min(1, 'Select year'),
+})
+
+type FormData = z.infer<typeof schema>
+
+export default function RegistrationForm(): ReactElement {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    mode: 'onTouched', 
   })
 
-  const handleChange = (e: any) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
-    console.log('FORM DATA:', form)
-
-    // 👉 Later: send to API / Sanity
+  const onSubmit = (data: FormData) => {
+    console.log('FORM DATA:', data)
     alert('Form submitted!')
   }
 
   return (
     <section className="flex justify-center">
-      <div className="w-full max-w-2xl mx-auto bg-white p-10 rounded-lg shadow">
+      <div className="w-full max-w-2xl bg-white p-10 rounded-lg shadow">
+
         {/* Title */}
         <div className="bg-green-100 text-center py-3 mb-8 rounded">
           <h2 className="text-lg font-semibold">Online Registration</h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
 
-          {/* Row 1 */}
-          <div className="grid md:grid-cols-2 gap-8 justify-center">
-            <Input label="First Name" name="firstName" onChange={handleChange} />
-            <Input label="Last Name" name="lastName" onChange={handleChange} />
+          {/* Row */}
+          <div className="grid md:grid-cols-2 gap-8">
+            <Input
+              label="First Name"
+              error={errors.firstName?.message}
+              {...register('firstName')}
+            />
+            <Input
+              label="Last Name"
+              error={errors.lastName?.message}
+              {...register('lastName')}
+            />
           </div>
 
-          {/* Email */}
-          <Input label="Email Address" name="email" onChange={handleChange} />
+          <Input
+            label="Email Address"
+            error={errors.email?.message}
+            {...register('email')}
+          />
 
-          {/* Company */}
-          <Input label="Company (if applicable)" name="company" onChange={handleChange} />
+          <Input
+            label="Company (if applicable)"
+            error={errors.company?.message}
+            {...register('company')}
+          />
 
-          {/* Address */}
-          <Input label="Physical Address" name="address" onChange={handleChange} />
+          <Input
+            label="Physical Address"
+            error={errors.address?.message}
+            {...register('address')}
+          />
 
           {/* DOB */}
-          <div className="grid grid-cols-3 gap-4 max-w-md">
-            <label className="block mb-2 text-sm font-medium">Date of Birth</label>
+          <div>
+            <label className="block mb-2 text-sm font-medium">
+              Date of Birth
+            </label>
 
-            <div className="grid grid-cols-3 gap-4">
-              <select name="month" onChange={handleChange} className="input">
-                <option>Month</option>
+            <div className="grid grid-cols-3 gap-4 max-w-md">
+              <select {...register('month')} className="input">
+                <option value="">Month</option>
                 {months.map((m) => <option key={m}>{m}</option>)}
               </select>
 
-              <select name="day" onChange={handleChange} className="input">
-                <option>Day</option>
+              <select {...register('day')} className="input">
+                <option value="">Day</option>
                 {[...Array(31)].map((_, i) => (
                   <option key={i + 1}>{i + 1}</option>
                 ))}
               </select>
 
-              <select name="year" onChange={handleChange} className="input">
-                <option>Year</option>
+              <select {...register('year')} className="input">
+                <option value="">Year</option>
                 {[...Array(50)].map((_, i) => (
                   <option key={i}>{2025 - i}</option>
                 ))}
               </select>
+            </div>
+
+            {/* DOB Errors */}
+            <div className="text-red-500 text-sm mt-2">
+              {errors.month?.message ||
+               errors.day?.message ||
+               errors.year?.message}
             </div>
           </div>
 
@@ -93,17 +127,20 @@ export default function RegistrationForm() : ReactElement {
 }
 
 /* 🔹 Reusable Input */
-function Input({ label, name, onChange }: any) {
+function Input({ label, error, ...props }: any) {
   return (
-    <div className="max-w-md">   {/* 👈 LIMIT WIDTH */}
+    <div className="max-w-md">
       <label className="block mb-2 text-sm font-medium">{label}</label>
 
       <input
-        name={name}
-        onChange={onChange}
+        {...props}
         className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         placeholder={label}
       />
+
+      {error && (
+        <p className="text-red-500 text-sm mt-1">{error}</p>
+      )}
     </div>
   )
 }
