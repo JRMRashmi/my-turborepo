@@ -11,7 +11,7 @@ type HeroProps = {
 
 export default function Hero({ section }: HeroProps): ReactElement {
   return (
-    <section className="grid md:grid-cols-2 items-stretch min-h-[500px] rounded-2xl overflow-hidden ml-10">
+    <section className="grid md:grid-cols-2 items-stretch min-h-[500px] rounded-2xl overflow-hidden">
 
   {/* LEFT SIDE (FULL HEIGHT CARD) */}
   <div className="relative bg-indigo-800 text-white p-10 flex flex-col justify-center h-full">

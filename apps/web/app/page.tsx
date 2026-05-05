@@ -3,8 +3,7 @@ import { client } from '../lib/sanity.client'
 import { homePageQuery } from '../lib/queries'
 
 import Hero from '../components/sections/Hero'
-import RichText from '../components/common/RichText'
-import CTA from '../components/sections/CTA'
+import Container from '../components/common/Container'
 
 import { Page } from '../types/page'
 import { Section } from '../types/section'
@@ -12,27 +11,33 @@ import { Section } from '../types/section'
 export default async function HomePage(): Promise<ReactElement> {
   const data: Page = await client.fetch(homePageQuery)
 
-   console.log("SANITY DATA:", data) // 👈 ADD HERE
-
   return (
-    <main className="min-h-screen bg-gray-50">
-      <div className="mx-auto max-w-6xl px-4 py-10">
-        <h1 className="mb-10 text-4xl font-bold tracking-tight text-gray-900">
+    <main className="min-h-screen">
+
+      {/* Title */}
+      <Container>
+        <h1 className="py-6 text-4xl font-bold text-gray-900">
           {data.title}
         </h1>
+      </Container>
 
-        <div className="space-y-16">
-          {data.sections.map((section: Section) => {
-            switch (section._type) {
-              case 'hero':
-                return <Hero key={section._key} section={section} />
+      {/* Sections */}
+      <div className="space-y-16">
+        {data.sections.map((section: Section) => {
+          switch (section._type) {
+            case 'hero':
+              return (
+                <Container key={section._key}>
+                  <Hero section={section} />
+                </Container>
+              )
 
-              default:
-                return null
-            }
-          })}
-        </div>
+            default:
+              return null
+          }
+        })}
       </div>
+
     </main>
   )
 }

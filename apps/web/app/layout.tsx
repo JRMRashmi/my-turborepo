@@ -27,8 +27,25 @@ export default function RootLayout({
 }: RootLayoutProps): ReactElement {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-gray-50`}>
+
+        {/* ✅ HEADER (full width) */}
+        <header className="w-full bg-white border-b">
+          <div className="max-w-6xl mx-auto px-6 py-4">
+            <h2 className="text-lg font-semibold">My Website</h2>
+          </div>
+        </header>
+
+        {/* ✅ PAGE CONTENT */}
         {children}
+
+        {/* ✅ FOOTER (full width) */}
+        <footer className="w-full bg-white border-t mt-16">
+          <div className="max-w-6xl mx-auto px-6 py-6 text-sm text-gray-500">
+            © 2026 My Website
+          </div>
+        </footer>
+
       </body>
     </html>
   )
