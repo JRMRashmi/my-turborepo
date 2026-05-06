@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { ReactElement } from 'react'
+import { useState, type ReactElement } from 'react'
 
 /* 🔹 Validation Schema */
 const schema = z.object({
@@ -28,11 +28,35 @@ export default function RegistrationForm(): ReactElement {
     resolver: zodResolver(schema),
     mode: 'onTouched', 
   })
+const [loading, setLoading] = useState(false)
+ const onSubmit = async (data: FormData) => {
+  try {
+    const { month, day, year, ...rest } = data
 
-  const onSubmit = (data: FormData) => {
-    console.log('FORM DATA:', data)
-    alert('Form submitted!')
+    const monthIndex = months.indexOf(month) + 1
+
+    const formattedDate = `${year}-${String(monthIndex).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+
+    const payload = {
+      ...rest,
+      dateOfBirth: formattedDate,
+    }
+
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+
+    const result = await res.json()
+
+    if (result.success) {
+      alert('✅ Registration successful!')
+    }
+  } catch (error) {
+    console.error(error)
   }
+}
 
   return (
     <section className="flex justify-center">
@@ -114,11 +138,12 @@ export default function RegistrationForm(): ReactElement {
 
           {/* Submit */}
           <button
-            type="submit"
-            className="mx-auto block bg-indigo-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-800 transition"
-          >
-            Submit Registration
-          </button>
+  type="submit"
+  disabled={loading}
+  className="mx-auto block bg-indigo-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-800 transition disabled:opacity-50"
+>
+  {loading ? 'Submitting...' : 'Submit Registration'}
+</button>
 
         </form>
       </div>
